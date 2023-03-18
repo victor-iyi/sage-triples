@@ -101,6 +101,11 @@ impl Graph {
     self.edges.len()
   }
 
+  /// Returns the number of triples in the graph.
+  pub fn n_triples(&self) -> usize {
+    self.triples.len()
+  }
+
   /// Returns the triples in the graph.
   pub fn triples(&self) -> &[Triple] {
     &self.triples
