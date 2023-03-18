@@ -164,6 +164,15 @@ Adj matrix:
  [0, 0, 1, 0]], shape=[4, 4], strides=[4, 1], layout=Cc (0x5), const ndim=2
 ```
 
+In order to compute the node features, edge features, edge embeddings, we would
+need a pre-trained embedding model. I've used [`finalfusion`]'s [pre-trained embeddings].
+
+You can download their pre-trained embedding (3.9G) by running:
+
+```sh
+wget -P data/ http://www.sfs.uni-tuebingen.de/a3-public-data/finalfusion/english-skipgram-mincount-50-ctx-10-ns-5-dims-300.fifu
+```
+
 ## Contribution
 
 You are very welcome to modify and use them in your own projects.
@@ -172,6 +181,8 @@ Please keep a link to the [original repository]. If you have made a fork with
 substantial modifications that you feel may be useful, then please
 [open a new issue on GitHub][issues] with a link and short description.
 
+[`finalfusion`]: https://github.com/finalfusion/finalfusion-rust
+[pre-trained embeddings]: https://finalfusion.github.io/pretrained
 [original repository]: https://github.com/victor-iyi/sage-triples
 [issues]: https://github.com/victor-iyi/sage-triples/issues
 

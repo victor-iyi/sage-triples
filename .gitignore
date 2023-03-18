@@ -9,3 +9,5 @@ Cargo.lock
 .vscode
 .DS_Store
 
+# Project
+data/
