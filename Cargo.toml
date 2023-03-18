@@ -16,3 +16,4 @@ name = "sage_triples"
 path = "src/lib.rs"
 
 [dependencies]
+ndarray = "0.15.6"
