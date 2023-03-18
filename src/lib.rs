@@ -1,3 +1,5 @@
+mod graph;
 mod triples;
 
-pub use triples::{Graph, Triple};
+pub use graph::Graph;
+pub use triples::Triple;

@@ -1,4 +1,5 @@
 use sage_triples::Graph;
+
 fn main() {
   let sro = Vec::from([
     ("simon", "plays", "tennis"),
@@ -11,8 +12,7 @@ fn main() {
     ("australia", "located", "melbourne"),
   ]);
 
-  let graph = Graph::from(sro);
-  println!("Graph: {:?}", graph);
+  let graph = Graph::from(sro.as_ref());
+  println!("{graph}");
   println!("Adj matrix: {:?}", graph.adj_matrix());
-  // println!("Hello, world!");
 }
