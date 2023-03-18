@@ -1,5 +1,9 @@
 # Sage Triples
 
+[![GitHub issues](https://img.shields.io/github/issues/victor-iyi/sage-triples)](https://github.com/victor-iyi/sage-triples/issues)
+[![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE_MIT)
+[![License Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE_APACHE)
+
 Sage Triples represents a Knowledge Graph (KG) as a collection of subject, object
 relation (s-r-o) triples. Nodes are a colleection of unique subject and object
 while the edges are the relationship between each nodes.
@@ -24,6 +28,21 @@ a format that is easily loaded into Graph Neural Networks for Machine Learning
 purposes. To achieve this, each subgraphs in the Knowledge Graph could return the
 following as an [`ndarray`].
 
+![A Sample Knowledge Graph](images/simon-kg.png)
+
+The s-r-o for the above Knowledge Graph would be:
+
+```sh
+[('simon', 'plays', 'tennis'),
+ ('simon', 'lives in', 'melbourne'),
+ ('tennis', 'sport in', 'melbourne'),
+ ('melbourne', 'located in', 'australia'),
+ ('tennis', 'plays', 'simon'),
+ ('melbourne', 'lives in', 'simon'),
+ ('melbourne', 'sport in', 'tennis'),
+ ('australia', 'located in', 'melbourne')]
+```
+
 - **Node Features** `(n_nodes, n_nodes)`
   Since we have `n_nodes` nodes and each node is mapped to its corresponding
   embedding vector with vector size `embedding_dim`. We can stack all features
@@ -37,7 +56,14 @@ following as an [`ndarray`].
   we can express this mathematically where each entry `a[i, j]` is non-zero if
   there exists an edge going from node `i` to node `j`, and zero otherwise.
 
-  We can represent `a` as a dense 2-D `ndarray` or a [`sprs`] sparse matrix of
+  ```sh
+    [[0. 1. 1. 0.]
+     [1. 0. 1. 0.]
+     [1. 1. 0. 1.]
+     [0. 0. 1. 0.]]
+  ```
+
+  We can represent `a` as a dense 2-D [`ndarray`] or a [`sprs`] sparse matrix of
   shape `(n_nodes, n_nodes)`. For an undirected graph `a[i, j] == a[j, i]` while
   this might not be the case for directed graphs.
 
@@ -100,3 +126,23 @@ following as an [`ndarray`].
 [ndarray-crate]: https://docs.rs/ndarray/latest/ndarray/index.html
 [`sprs`]: https://docs.rs/sprs/latest/sprs/
 <!-- [ndarray_npy]: https://docs.rs/ndarray-npy/latest/ndarray_npy/index.html -->
+
+## Contribution
+
+You are very welcome to modify and use them in your own projects.
+
+Please keep a link to the [original repository]. If you have made a fork with
+substantial modifications that you feel may be useful, then please
+[open a new issue on GitHub][issues] with a link and short description.
+
+[original repository]: https://github.com/victor-iyi/sage-triples
+[issues]: https://github.com/victor-iyi/sage-triples/issues
+
+## License (Apache & MIT)
+
+This project is opened under the dual license of [Apache License 2.0](./LICENSE_APACHE)
+and [MIT](./LICENSE_MIT) which allows very broad use for both private and
+commercial purposes.
+
+A few of the images used for demonstration purposes may be under copyright.
+These images are included under the "fair usage" laws.

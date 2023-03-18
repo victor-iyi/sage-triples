@@ -1,8 +1,18 @@
 [package]
 name = "sage-triples"
 version = "0.1.0"
+authors = ["Victor I. Afaolabi <javafolabi@gmail.com>"]
 edition = "2021"
+description = "A library for converting Knowledge Graph triples into GNN friendly format"
+readme = "README.md"
+repository = "https://github.com/victor-iyi/sage-triples"
+license = "MIT OR Apache-2.0"
+keywords = ["knowledge-graph", "graph-neural-network", "gnn", "triple"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "sage_triples"
+path = "src/lib.rs"
 
 [dependencies]
