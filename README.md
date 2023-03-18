@@ -128,6 +128,42 @@ The s-r-o for the above Knowledge Graph would be:
 [`sprs`]: https://docs.rs/sprs/latest/sprs/
 <!-- [ndarray_npy]: https://docs.rs/ndarray-npy/latest/ndarray_npy/index.html -->
 
+## Example
+
+Let's use the above Knowledge Graph.
+
+```rust
+use sro_triples::Graph;
+
+let sro = Vec::from([
+  ("simon", "plays", "tennis"),
+  ("simon", "lives", "melbourne"),
+  ("tennis", "sport", "melbourne"),
+  ("melbourne", "located", "australia"),
+  ("tennis", "plays", "simon"),
+  ("melbourne", "lives", "simon"),
+  ("melbourne", "sport", "tennis"),
+  ("australia", "located", "melbourne"),
+]);
+
+let graph = Graph::from(sro.as_ref());
+println!("Graph Nodes: {:?}", graph.nodes());
+println!("Grph Edges: {:?}", graph.edges());
+println!("Adj matrix:\n{:?}", graph.adj_matrix());
+```
+
+Output:
+
+```sh
+Graph Nodes: ["simon", "tennis", "melbourne", "australia"]
+Grph Edges: ["plays", "lives", "sport", "located", "plays", "lives", "sport", "located"]
+Adj matrix:
+[[0, 1, 1, 0],
+ [1, 0, 1, 0],
+ [1, 1, 0, 1],
+ [0, 0, 1, 0]], shape=[4, 4], strides=[4, 1], layout=Cc (0x5), const ndim=2
+```
+
 ## Contribution
 
 You are very welcome to modify and use them in your own projects.

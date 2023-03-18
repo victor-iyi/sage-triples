@@ -13,6 +13,7 @@ fn main() {
   ]);
 
   let graph = Graph::from(sro.as_ref());
-  println!("{graph}");
-  println!("Adj matrix: {:?}", graph.adj_matrix());
+  println!("Graph Nodes: {:?}", graph.nodes());
+  println!("Grph Edges: {:?}", graph.edges());
+  println!("Adj matrix:\n{:?}", graph.adj_matrix());
 }
