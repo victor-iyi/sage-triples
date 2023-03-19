@@ -1,5 +1,7 @@
 # Sage Triples
 
+<!-- markdownlint-disable MD013 -->
+
 [![CI](https://github.com/victor-iyi/sage-triples/actions/workflows/ci.yml/badge.svg)](https://github.com/victor-iyi/sage-triples/actions/workflows/ci.yml)
 [![GitHub issues](https://img.shields.io/github/issues/victor-iyi/sage-triples)](https://github.com/victor-iyi/sage-triples/issues)
 [![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE_MIT)
@@ -149,7 +151,11 @@ let sro = Vec::from([
 let graph = Graph::from(sro.as_ref());
 println!("Graph Nodes: {:?}", graph.nodes());
 println!("Grph Edges: {:?}", graph.edges());
-println!("Adj matrix:\n{:?}", graph.adj_matrix());
+println!("\nAdj matrix:\n{:?}", graph.adj_matrix());
+
+let edge_features = graph.edge_features();
+println!("\nSparse edge features:\n{:?}", edge_features);
+println!("\nDense edge features:\n{:?}", edge_features.to_dense());
 ```
 
 Output:
@@ -157,17 +163,34 @@ Output:
 ```sh
 Graph Nodes: ["simon", "tennis", "melbourne", "australia"]
 Grph Edges: ["plays", "lives", "sport", "located", "plays", "lives", "sport", "located"]
+
 Adj matrix:
 [[0, 1, 1, 0],
  [1, 0, 1, 0],
  [1, 1, 0, 1],
  [0, 0, 1, 0]], shape=[4, 4], strides=[4, 1], layout=Cc (0x5), const ndim=2
-```
+
+Sparse edge features:
+CsMatBase { storage: CSR, nrows: 8, ncols: 8, indptr: IndPtrBase { storage: [0, 1, 2, 5, 6, 6, 6, 6, 6] }, indices: [2, 2, 0, 1, 3
+, 2], data: [1, 2, 1, 2, 3, 3] }
+
+Dense edge features:
+[[0, 0, 1, 0, 0, 0, 0, 0],
+ [0, 0, 2, 0, 0, 0, 0, 0],
+ [1, 2, 0, 3, 0, 0, 0, 0],
+ [0, 0, 3, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0]], shape=[8, 8], strides=[8, 1], layout=Cc (0x5), const ndim=2```
 
 In order to compute the node features, edge features, edge embeddings, we would
 need a pre-trained embedding model. I've used [`finalfusion`]'s [pre-trained embeddings].
 
 You can download their pre-trained embedding (3.9G) by running:
+
+[`finalfusion`]: https://github.com/finalfusion/finalfusion-rust
+[pre-trained embeddings]: https://finalfusion.github.io/pretrained
 
 ```sh
 wget -P data/ http://www.sfs.uni-tuebingen.de/a3-public-data/finalfusion/english-skipgram-mincount-50-ctx-10-ns-5-dims-300.fifu
@@ -181,8 +204,6 @@ Please keep a link to the [original repository]. If you have made a fork with
 substantial modifications that you feel may be useful, then please
 [open a new issue on GitHub][issues] with a link and short description.
 
-[`finalfusion`]: https://github.com/finalfusion/finalfusion-rust
-[pre-trained embeddings]: https://finalfusion.github.io/pretrained
 [original repository]: https://github.com/victor-iyi/sage-triples
 [issues]: https://github.com/victor-iyi/sage-triples/issues
 
