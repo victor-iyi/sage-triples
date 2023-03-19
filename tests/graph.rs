@@ -24,10 +24,26 @@ fn test_graph() {
 
 #[test]
 fn test_adj_matrix() {
-  // let sro = Vec::from(SRO);
   let graph = Graph::from(SRO);
   assert_eq!(
     graph.adj_matrix(),
     array![[0, 1, 1, 0], [1, 0, 1, 0], [1, 1, 0, 1], [0, 0, 1, 0]]
   );
+}
+
+#[test]
+fn test_edge_features() {
+  let graph = Graph::from(SRO);
+  let dense_matrix = array![
+    [0, 0, 1, 0, 0, 0, 0, 0],
+    [0, 0, 2, 0, 0, 0, 0, 0],
+    [1, 2, 0, 3, 0, 0, 0, 0],
+    [0, 0, 3, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0]
+  ];
+  let edge_features = graph.edge_features();
+  assert_eq!(edge_features.to_dense(), dense_matrix);
 }
