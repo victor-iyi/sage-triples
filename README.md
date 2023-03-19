@@ -11,6 +11,73 @@ Sage Triples represents a Knowledge Graph (KG) as a collection of subject, objec
 relation (s-r-o) triples. Nodes are a colleection of unique subject and object
 while the edges are the relationship between each nodes.
 
+## Example
+
+Let's use the Knowledge Graph below as an example.
+
+```rust
+use sro_triples::Graph;
+
+let sro = Vec::from([
+  ("simon", "plays", "tennis"),
+  ("simon", "lives", "melbourne"),
+  ("tennis", "sport", "melbourne"),
+  ("melbourne", "located", "australia"),
+  ("tennis", "plays", "simon"),
+  ("melbourne", "lives", "simon"),
+  ("melbourne", "sport", "tennis"),
+  ("australia", "located", "melbourne"),
+]);
+
+let graph = Graph::from(sro.as_ref());
+println!("Graph Nodes: {:?}", graph.nodes());
+println!("Grph Edges: {:?}", graph.edges());
+println!("\nAdj matrix:\n{:?}", graph.adj_matrix());
+
+let edge_features = graph.edge_features();
+println!("\nSparse edge features:\n{:?}", edge_features);
+println!("\nDense edge features:\n{:?}", edge_features.to_dense());
+```
+
+Output:
+
+```sh
+Graph Nodes: ["simon", "tennis", "melbourne", "australia"]
+Grph Edges: ["plays", "lives", "sport", "located", "plays", "lives", "sport", "located"]
+
+Adj matrix:
+[[0, 1, 1, 0],
+ [1, 0, 1, 0],
+ [1, 1, 0, 1],
+ [0, 0, 1, 0]], shape=[4, 4], strides=[4, 1], layout=Cc (0x5), const ndim=2
+
+Sparse edge features:
+CsMatBase { storage: CSR, nrows: 8, ncols: 8, indptr: IndPtrBase { storage: [0, 1, 2, 5, 6, 6, 6, 6, 6] }, indices: [2, 2, 0, 1, 3
+, 2], data: [1, 2, 1, 2, 3, 3] }
+
+Dense edge features:
+[[0, 0, 1, 0, 0, 0, 0, 0],
+ [0, 0, 2, 0, 0, 0, 0, 0],
+ [1, 2, 0, 3, 0, 0, 0, 0],
+ [0, 0, 3, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0]], shape=[8, 8], strides=[8, 1], layout=Cc (0x5), const ndim=2
+```
+
+In order to compute the node features, edge features, edge embeddings, we would
+need a pre-trained embedding model. I've used [`finalfusion`]'s [pre-trained embeddings].
+
+You can download their pre-trained embedding (3.9G) by running:
+
+[`finalfusion`]: https://github.com/finalfusion/finalfusion-rust
+[pre-trained embeddings]: https://finalfusion.github.io/pretrained
+
+```sh
+wget -P data/ http://www.sfs.uni-tuebingen.de/a3-public-data/finalfusion/english-skipgram-mincount-50-ctx-10-ns-5-dims-300.fifu
+```
+
 ## Triples
 
 A *subject* node is connected to an *object* node via a *relation* edge. A triple
@@ -129,73 +196,6 @@ The s-r-o for the above Knowledge Graph would be:
 [ndarray-crate]: https://docs.rs/ndarray/latest/ndarray/index.html
 [`sprs`]: https://docs.rs/sprs/latest/sprs/
 <!-- [ndarray_npy]: https://docs.rs/ndarray-npy/latest/ndarray_npy/index.html -->
-
-## Example
-
-Let's use the above Knowledge Graph.
-
-```rust
-use sro_triples::Graph;
-
-let sro = Vec::from([
-  ("simon", "plays", "tennis"),
-  ("simon", "lives", "melbourne"),
-  ("tennis", "sport", "melbourne"),
-  ("melbourne", "located", "australia"),
-  ("tennis", "plays", "simon"),
-  ("melbourne", "lives", "simon"),
-  ("melbourne", "sport", "tennis"),
-  ("australia", "located", "melbourne"),
-]);
-
-let graph = Graph::from(sro.as_ref());
-println!("Graph Nodes: {:?}", graph.nodes());
-println!("Grph Edges: {:?}", graph.edges());
-println!("\nAdj matrix:\n{:?}", graph.adj_matrix());
-
-let edge_features = graph.edge_features();
-println!("\nSparse edge features:\n{:?}", edge_features);
-println!("\nDense edge features:\n{:?}", edge_features.to_dense());
-```
-
-Output:
-
-```sh
-Graph Nodes: ["simon", "tennis", "melbourne", "australia"]
-Grph Edges: ["plays", "lives", "sport", "located", "plays", "lives", "sport", "located"]
-
-Adj matrix:
-[[0, 1, 1, 0],
- [1, 0, 1, 0],
- [1, 1, 0, 1],
- [0, 0, 1, 0]], shape=[4, 4], strides=[4, 1], layout=Cc (0x5), const ndim=2
-
-Sparse edge features:
-CsMatBase { storage: CSR, nrows: 8, ncols: 8, indptr: IndPtrBase { storage: [0, 1, 2, 5, 6, 6, 6, 6, 6] }, indices: [2, 2, 0, 1, 3
-, 2], data: [1, 2, 1, 2, 3, 3] }
-
-Dense edge features:
-[[0, 0, 1, 0, 0, 0, 0, 0],
- [0, 0, 2, 0, 0, 0, 0, 0],
- [1, 2, 0, 3, 0, 0, 0, 0],
- [0, 0, 3, 0, 0, 0, 0, 0],
- [0, 0, 0, 0, 0, 0, 0, 0],
- [0, 0, 0, 0, 0, 0, 0, 0],
- [0, 0, 0, 0, 0, 0, 0, 0],
- [0, 0, 0, 0, 0, 0, 0, 0]], shape=[8, 8], strides=[8, 1], layout=Cc (0x5), const ndim=2
-```
-
-In order to compute the node features, edge features, edge embeddings, we would
-need a pre-trained embedding model. I've used [`finalfusion`]'s [pre-trained embeddings].
-
-You can download their pre-trained embedding (3.9G) by running:
-
-[`finalfusion`]: https://github.com/finalfusion/finalfusion-rust
-[pre-trained embeddings]: https://finalfusion.github.io/pretrained
-
-```sh
-wget -P data/ http://www.sfs.uni-tuebingen.de/a3-public-data/finalfusion/english-skipgram-mincount-50-ctx-10-ns-5-dims-300.fifu
-```
 
 ## Contribution
 
