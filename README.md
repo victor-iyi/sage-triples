@@ -182,7 +182,8 @@ Dense edge features:
  [0, 0, 0, 0, 0, 0, 0, 0],
  [0, 0, 0, 0, 0, 0, 0, 0],
  [0, 0, 0, 0, 0, 0, 0, 0],
- [0, 0, 0, 0, 0, 0, 0, 0]], shape=[8, 8], strides=[8, 1], layout=Cc (0x5), const ndim=2```
+ [0, 0, 0, 0, 0, 0, 0, 0]], shape=[8, 8], strides=[8, 1], layout=Cc (0x5), const ndim=2
+```
 
 In order to compute the node features, edge features, edge embeddings, we would
 need a pre-trained embedding model. I've used [`finalfusion`]'s [pre-trained embeddings].
