@@ -1,5 +1,8 @@
 use crate::triples::Triple;
+
+use finalfusion::{prelude::*, storage::Storage, vocab::Vocab};
 use ndarray::Array2;
+use sprs::CsMat;
 
 /// A Graph is a collection of triples, and an abstraction
 /// for subgraphs in the Knowledge Graph.
@@ -45,6 +48,62 @@ impl Graph {
 }
 
 impl Graph {
+  /// Node features is a 2-D array of size `(n_nodes, embedding_dims)`.
+  pub fn node_features<V, S>(
+    &self,
+    embeddings: &Embeddings<V, S>,
+  ) -> Array2<f32>
+  where
+    V: Vocab,
+    S: Storage,
+  {
+    let mut matrix = Array2::zeros((self.n_nodes(), embeddings.dims()));
+    for (i, node) in self.nodes.iter().enumerate() {
+      if let Some(embedding) = embeddings.embedding(node) {
+        matrix.row_mut(i).assign(&embedding);
+      }
+    }
+    matrix
+  }
+
+  /// Edge embeddings is a 2-D array of size `(n_edges, embedding_dims)`.
+  pub fn edge_embeddings<V, S>(
+    &self,
+    embeddings: &Embeddings<V, S>,
+  ) -> Array2<f32>
+  where
+    V: Vocab,
+    S: Storage,
+  {
+    let mut matrix = Array2::zeros((self.n_edges(), embeddings.dims()));
+    for (i, edge) in self.edges.iter().enumerate() {
+      if let Some(embedding) = embeddings.embedding(edge) {
+        matrix.row_mut(i).assign(&embedding);
+      }
+    }
+    matrix
+  }
+
+  /// Edge features is a sparse 2-D matrix of size `(n_edges, n_edges)`.
+  pub fn edge_features(
+    &self,
+    // embeddings: &Embeddings<V, S>,
+  ) -> CsMat<i32> {
+    let n = self.n_edges();
+    let mut matrix = Array2::zeros((n, n));
+    for triple in &self.triples {
+      let s = self.get_node_idx(triple.subject()).unwrap();
+      let o = self.get_node_idx(triple.object()).unwrap();
+      let r = self.get_edge_idx(triple.relation()).unwrap();
+      matrix[[s, o]] = r as i32;
+    }
+
+    let sparse = CsMat::csr_from_dense(matrix.view(), -1);
+    sparse
+  }
+}
+
+impl Graph {
   /// Add unique nodes.
   fn add_node(&mut self, node: String) {
     if self.nodes.contains(&node) {
@@ -69,6 +128,11 @@ impl Graph {
   /// Return the index of a node in the nodes vector.
   pub fn get_node_idx(&self, node: &str) -> Option<usize> {
     self.nodes.iter().position(|n| n == node)
+  }
+
+  /// Return the index of an edge in the edges vector.
+  pub fn get_edge_idx(&self, edge: &str) -> Option<usize> {
+    self.edges.iter().position(|e| e == edge)
   }
 
   /// Checks whether the graph is a directed graph.
