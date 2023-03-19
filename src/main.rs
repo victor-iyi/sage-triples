@@ -25,7 +25,7 @@ fn main() {
   println!("\nSparse edge features:\n{:?}", edge_features);
   println!("\nDense edge features:\n{:?}", edge_features.to_dense());
 
-  // TODO: Model too large to fit in memory.
+  // FIXME(victor): Model too large to fit in memory.
   // let path = "data/english-skipgram-mincount-50-ctx-10-ns-5-dims-300.fifu";
   // let mut reader = BufReader::new(File::open(path).unwrap());
   // let embed =
